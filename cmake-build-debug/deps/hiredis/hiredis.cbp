@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="hiredis"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\deps\;CMake Files\deps\hiredis\;CMake Files\deps\linenoise\;CMake Files\deps\lua\;CMake Files\src\;CMake Files\src\modules\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="hiredis-test">
+				<Option output="/Users/liumingwei/Downloads/redis-6.0/src/hiredis-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/../src"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/."/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/10.0.1/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 hiredis-test"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="hiredis-test/fast">
+				<Option output="/Users/liumingwei/Downloads/redis-6.0/src/hiredis-test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/../src"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/."/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/10.0.1/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 hiredis-test/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="hiredis">
+				<Option output="/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/libhiredis.dylib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/."/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/10.0.1/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 hiredis"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="hiredis/fast">
+				<Option output="/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/libhiredis.dylib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/."/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/10.0.1/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 hiredis/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/async.c">
+			<Option target="hiredis"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/async.h">
+			<Option target="hiredis"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/dict.c">
+			<Option target="hiredis"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/dict.h">
+			<Option target="hiredis"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/hiredis.c">
+			<Option target="hiredis"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/hiredis.h">
+			<Option target="hiredis"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/net.c">
+			<Option target="hiredis"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/net.h">
+			<Option target="hiredis"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/read.c">
+			<Option target="hiredis"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/read.h">
+			<Option target="hiredis"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/sds.c">
+			<Option target="hiredis"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/sds.h">
+			<Option target="hiredis"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/sockcompat.c">
+			<Option target="hiredis"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/sockcompat.h">
+			<Option target="hiredis"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/test.c">
+			<Option target="hiredis-test"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\deps\"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\deps\hiredis\"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/hiredis/hiredis.pc.in">
+			<Option virtualFolder="CMake Files\deps\hiredis\"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/linenoise/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\deps\linenoise\"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/deps/lua/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\deps\lua\"/>
+		</Unit>
+		<Unit filename="/Users/liumingwei/Downloads/redis-6.0/src/modules/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\modules\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

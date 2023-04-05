@@ -1,0 +1,1 @@
+/Library/Developer/CommandLineTools/usr/bin/cc -g -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/hiredis-test.dir/test.c.o  -o ../../../src/hiredis-test -Wl,-rpath,/Users/liumingwei/Downloads/redis-6.0/cmake-build-debug/deps/hiredis libhiredis.0.14.dylib 
