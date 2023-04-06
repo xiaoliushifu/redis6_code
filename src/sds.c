@@ -122,7 +122,7 @@ sds sdsnewlen(const void *init, size_t initlen) {
     if (sh == NULL) return NULL;
     if (init==SDS_NOINIT)
         init = NULL;
-    else if (!init)
+    else if (!init)//init是NULL时候!init才为真，如果是""则!init为false
         memset(sh, 0, hdrlen+initlen+1);
     //sh是申请了结构体大小的指针，这里再偏移hdrlen返回s，这样s就指向了buf，也就是sds指针了
     s = (char*)sh+hdrlen;
@@ -174,18 +174,22 @@ sds sdsnewlen(const void *init, size_t initlen) {
 }
 
 /* Create an empty (zero length) sds string. Even in this case the string
- * always has an implicit null term. */
+ * always has an implicit null term.
+ *  返回一个指向""的sds，buf成员只有一个暗含的\0;
+ * */
 sds sdsempty(void) {
     return sdsnewlen("",0);
 }
 
 /* Create a new sds string starting from a null terminated C string. */
+//根据一个原始字符串，初始化一个sds
 sds sdsnew(const char *init) {
     size_t initlen = (init == NULL) ? 0 : strlen(init);
     return sdsnewlen(init, initlen);
 }
 
 /* Duplicate an sds string. */
+//复制一个sds
 sds sdsdup(const sds s) {
     return sdsnewlen(s, sdslen(s));
 }
@@ -210,6 +214,7 @@ void sdsfree(sds s) {
  * The output will be "2", but if we comment out the call to sdsupdatelen()
  * the output will be "6" as the string was modified but the logical length
  * remains 6 bytes. */
+//只是按照strlen设置真实的sds长度，len成员
 void sdsupdatelen(sds s) {
     size_t reallen = strlen(s);
     sdssetlen(s, reallen);
@@ -219,6 +224,8 @@ void sdsupdatelen(sds s) {
  * However all the existing buffer is not discarded but set as free space
  * so that next append operations will not require allocations up to the
  * number of bytes previously available. */
+//注意，这里仅仅设置len成员为0，然后sds第一个成员为\0,
+//实际sds的后续空间还包含了旧字符串，但是已经是垃圾字符串了；
 void sdsclear(sds s) {
     sdssetlen(s, 0);
     s[0] = '\0';
@@ -230,6 +237,8 @@ void sdsclear(sds s) {
  *
  * Note: this does not change the *length* of the sds string as returned
  * by sdslen(), but only the free buffer space we have. */
+//扩大sds的内存空间，2倍大小扩容或者是加1M扩容；
+//新申请一个sds结构体，内存拷贝；扩大alloc了
 sds sdsMakeRoomFor(sds s, size_t addlen) {
     void *sh, *newsh;
     size_t avail = sdsavail(s);
@@ -238,17 +247,22 @@ sds sdsMakeRoomFor(sds s, size_t addlen) {
     int hdrlen;
 
     /* Return ASAP if there is enough space left. */
+    //如果sds的剩余空间够用，那就直接返回哦
+    //alloc-len就是剩余空间
     if (avail >= addlen) return s;
 
     len = sdslen(s);
+    //回退到结构体首地址，sh也就是结构体指针了；
     sh = (char*)s-sdsHdrSize(oldtype);
     reqlen = newlen = (len+addlen);
     assert(newlen > len);   /* Catch size_t overflow */
+    //新长度小于1024*1024，也就是1M；那么2倍；
     if (newlen < SDS_MAX_PREALLOC)
         newlen *= 2;
     else
+        //如果大于1M，那么再加1M;如果还不够，那么会多次MakeRoomFor直到够用
         newlen += SDS_MAX_PREALLOC;
-
+    //新长度下，看看应该使用哪个类型的sdshdr
     type = sdsReqType(newlen);
 
     /* Don't use type 5: the user is appending to the string and type 5 is
@@ -256,8 +270,10 @@ sds sdsMakeRoomFor(sds s, size_t addlen) {
      * at every appending operation. */
     if (type == SDS_TYPE_5) type = SDS_TYPE_8;
 
+    //header的头大小，不包含buf成员，只是len,alloc,flags三个成员的；
     hdrlen = sdsHdrSize(type);
     assert(hdrlen + newlen + 1 > reqlen);  /* Catch size_t overflow */
+    //新老的sdshdr类型相同，那么直接申请内存即可；
     if (oldtype==type) {
         newsh = s_realloc(sh, hdrlen+newlen+1);
         if (newsh == NULL) return NULL;
@@ -267,12 +283,16 @@ sds sdsMakeRoomFor(sds s, size_t addlen) {
          * and can't use realloc */
         newsh = s_malloc(hdrlen+newlen+1);
         if (newsh == NULL) return NULL;
+        //把旧s的内容，拷贝到新sds的内存位置；
         memcpy((char*)newsh+hdrlen, s, len+1);
+        //紧接着可以释放旧的sh结构体了；
         s_free(sh);
         s = (char*)newsh+hdrlen;
         s[-1] = type;
-        sdssetlen(s, len);
+        sdssetlen(s, len);//注意，长度还是旧的len，只是扩展了sds大小；
     }
+    //这里申请空间，本质就是扩大了alloc，那么avail也就大了；
+    //所以只是扩容了，但是旧的内容还得保留；
     sdssetalloc(s, newlen);
     return s;
 }
