@@ -66,10 +66,19 @@ static inline int sdsHdrSize(char type) {
     return 0;
 }
 
+/**
+ * 根据字符串长度，判断不同的sds结构体
+ * sdshdr5可以容纳32个字符
+ * sdshdr8可以容纳256个字符
+ * sdshdr16 可以容纳1024 *64
+ *
+ * @param string_size
+ * @return
+ */
 static inline char sdsReqType(size_t string_size) {
-    if (string_size < 1<<5)
+    if (string_size < 1<<5) //左移5位，扩大32倍，也就是32位个字符长度
         return SDS_TYPE_5;
-    if (string_size < 1<<8)
+    if (string_size < 1<<8) //256个字符
         return SDS_TYPE_8;
     if (string_size < 1<<16)
         return SDS_TYPE_16;
@@ -98,29 +107,36 @@ static inline char sdsReqType(size_t string_size) {
 sds sdsnewlen(const void *init, size_t initlen) {
     void *sh;
     sds s;
-    char type = sdsReqType(initlen);
+    //根据字符串长度，选择合适的sds结构体
+    char type = sdsReqType(initlen);//
     /* Empty strings are usually created in order to append. Use type 8
      * since type 5 is not good at this. */
     if (type == SDS_TYPE_5 && initlen == 0) type = SDS_TYPE_8;
+    //获得这种结构体的header长度，比如SDS_TYPE_8的header大小就是3
+    //所谓header，也就是len,alloc,flags这前三个成员
     int hdrlen = sdsHdrSize(type);
     unsigned char *fp; /* flags pointer. */
 
     assert(initlen + hdrlen + 1 > initlen); /* Catch size_t overflow */
-    sh = s_malloc(hdrlen+initlen+1);
+    sh = s_malloc(hdrlen+initlen+1);//len,alloc,flags成员的大小就是hdrlen，然后再加上buf数组的长度，1就是\0;
     if (sh == NULL) return NULL;
     if (init==SDS_NOINIT)
         init = NULL;
     else if (!init)
         memset(sh, 0, hdrlen+initlen+1);
+    //sh是申请了结构体大小的指针，这里再偏移hdrlen返回s，这样s就指向了buf，也就是sds指针了
     s = (char*)sh+hdrlen;
-    fp = ((unsigned char*)s)-1;
+    fp = ((unsigned char*)s)-1; //flags成员固定是unsigned char，一个字节大小，buf基础上再偏移回一个字节就是fp成员了；
     switch(type) {
         case SDS_TYPE_5: {
             *fp = type | (initlen << SDS_TYPE_BITS);
             break;
         }
         case SDS_TYPE_8: {
-            SDS_HDR_VAR(8,s);
+            //SDS_HDR_VAR宏替换后，就是：
+            // struct sdshdr8 *sh = (void*)((s)-(sizeof(struct sdshdr8)));
+            SDS_HDR_VAR(8,s);//生成对应结构体的指针，这个case就是生成指向sdshdr8的*sh
+            //然后设置，len，alloc，fp成员
             sh->len = initlen;
             sh->alloc = initlen;
             *fp = type;
@@ -148,9 +164,12 @@ sds sdsnewlen(const void *init, size_t initlen) {
             break;
         }
     }
+    //这个是针对扩容场景的吧？把原始init字符指针，按照initlen长度复制到新的指针s中；
     if (initlen && init)
         memcpy(s, init, initlen);
     s[initlen] = '\0';
+    //返回的是指向buf成员的指针s，并不是sdshdr结构体
+    //有了s，就可以通过地址偏移（往回偏移）得到结构体的起始地值
     return s;
 }
 
