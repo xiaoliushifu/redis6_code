@@ -85,6 +85,7 @@ struct __attribute__ ((__packed__)) sdshdr64 {
 #define SDS_HDR(T,s) ((struct sdshdr##T *)((s)-(sizeof(struct sdshdr##T))))
 #define SDS_TYPE_5_LEN(f) ((f)>>SDS_TYPE_BITS)
 
+//仅仅获得sds背后结构体的len成员
 static inline size_t sdslen(const sds s) {
     unsigned char flags = s[-1];
     switch(flags&SDS_TYPE_MASK) {
@@ -102,6 +103,10 @@ static inline size_t sdslen(const sds s) {
     return 0;
 }
 
+//从该方法可知：
+//avail其实就是alloc-len;
+//sds字符串为了防止频繁的申请内存，其实是预先申请了一块内存，通过len，alloc来标记当前实际使用了多少；
+//还有多少可以给后续延长字符串或者缩小字符串使用，只需要移动指针更新len，alloc就行；不需要向内存重新申请；
 static inline size_t sdsavail(const sds s) {
     unsigned char flags = s[-1];
     switch(flags&SDS_TYPE_MASK) {
@@ -128,7 +133,10 @@ static inline size_t sdsavail(const sds s) {
     return 0;
 }
 
+//
+//除了SDS_TYPE_5之外，这里只是修改了结构体的len成员为newlen，实际的sds并没有发生变化，alloc，flags都不变；
 static inline void sdssetlen(sds s, size_t newlen) {
+    //注意这个操作，s回退一个字节的指针地址，就是flags成员
     unsigned char flags = s[-1];
     switch(flags&SDS_TYPE_MASK) {
         case SDS_TYPE_5:
@@ -138,6 +146,9 @@ static inline void sdssetlen(sds s, size_t newlen) {
             }
             break;
         case SDS_TYPE_8:
+            //SDS_HDR宏展开就是：
+            //((struct sdshdr8 *)((s)-(sizeof(struct sdshdr8))))
+            //也就是根据s回退所属结构体的一个header的大小，这样就到整个sdshdr8结构体的首地址，也就是sdshdr8的指针了
             SDS_HDR(8,s)->len = newlen;
             break;
         case SDS_TYPE_16:
@@ -152,6 +163,11 @@ static inline void sdssetlen(sds s, size_t newlen) {
     }
 }
 
+/**
+ * 只对len成员做加操作，其他成员不变；
+ * @param s
+ * @param inc
+ */
 static inline void sdsinclen(sds s, size_t inc) {
     unsigned char flags = s[-1];
     switch(flags&SDS_TYPE_MASK) {
@@ -178,6 +194,7 @@ static inline void sdsinclen(sds s, size_t inc) {
 }
 
 /* sdsalloc() = sdsavail() + sdslen() */
+//只是获取sds背后结构体的alloc成员
 static inline size_t sdsalloc(const sds s) {
     unsigned char flags = s[-1];
     switch(flags&SDS_TYPE_MASK) {
@@ -195,6 +212,7 @@ static inline size_t sdsalloc(const sds s) {
     return 0;
 }
 
+//只修改sds背后的结构体的成员alloc，其他成员不变
 static inline void sdssetalloc(sds s, size_t newlen) {
     unsigned char flags = s[-1];
     switch(flags&SDS_TYPE_MASK) {
