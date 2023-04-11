@@ -187,51 +187,64 @@ int dictExpand(dict *d, unsigned long size)
  * work it does would be unbound and the function may block for a long time. */
 int dictRehash(dict *d, int n) {
     int empty_visits = n*10; /* Max number of empty buckets to visit. */
+    //这个枚举在哪里设置的呢？暂不清楚，就是一些校验吧，告知当前环境去rehash不好，直接退出；
     if (dict_can_resize == DICT_RESIZE_FORBID || !dictIsRehashing(d)) return 0;
+    //这个比例
     if (dict_can_resize == DICT_RESIZE_AVOID && 
         (d->ht[1].size / d->ht[0].size < dict_force_resize_ratio))
     {
         return 0;
     }
 
+    //循环搬运
     while(n-- && d->ht[0].used != 0) {
         dictEntry *de, *nextde;
 
         /* Note that rehashidx can't overflow as we are sure there are more
          * elements because ht[0].used != 0 */
+        //确保容量，要大于数组下标
         assert(d->ht[0].size > (unsigned long)d->rehashidx);
+        //如果某个下标是NULL，那么偏移一个机会，继续找直到不是NULL的；
+        //或者十次机会全部用完，返回1
         while(d->ht[0].table[d->rehashidx] == NULL) {
             d->rehashidx++;
             if (--empty_visits == 0) return 1;
         }
+        //这次是ht[0]的哪个下标搬到ht[1]中
         de = d->ht[0].table[d->rehashidx];
         /* Move all the keys in this bucket from the old to the new hash HT */
         while(de) {
             uint64_t h;
 
-            nextde = de->next;
+            nextde = de->next;//可能有值，这是链地址法，hash冲突场景
             /* Get the index in the new hash table */
+            //用hash函数计算数组下标，将要放在ht[1]里的下标；
             h = dictHashKey(d, de->key) & d->ht[1].sizemask;
-            de->next = d->ht[1].table[h];
-            d->ht[1].table[h] = de;
-            d->ht[0].used--;
-            d->ht[1].used++;
+            de->next = d->ht[1].table[h];//ht[1]里有可能也有值了，可能是链表；放到本次正在转移的de的next域中；
+            d->ht[1].table[h] = de; //de放到ht[1]里
+            d->ht[0].used--; //ht[0]的空间减小了一个
+            d->ht[1].used++;//ht[1]的空间扩大了一个
+            //准备链地址的下一个dictEntry，如果没有冲突，那么它是NULL，退出循环；
             de = nextde;
         }
+        //搬运好了，那么ht[0]的那个下标rehashidx的位置置为NULL
         d->ht[0].table[d->rehashidx] = NULL;
+        //加一，下次可以搬运下一个下标的；
         d->rehashidx++;
     }
 
     /* Check if we already rehashed the whole table... */
+    //这次搬运了一个de之后，检查下这个d是不是全部搬运完了
     if (d->ht[0].used == 0) {
-        zfree(d->ht[0].table);
-        d->ht[0] = d->ht[1];
-        _dictReset(&d->ht[1]);
-        d->rehashidx = -1;
-        return 0;
+        zfree(d->ht[0].table);//搬运完了，那就free掉，立马回收空间
+        d->ht[0] = d->ht[1]; //把ht[1]改名为h[0]就行；
+        _dictReset(&d->ht[1]); //此时再把ht[1]置空
+        d->rehashidx = -1; //表示rehash结束
+        return 0;//返回0，表示这次搬运是个结束过程；
     }
 
     /* More to rehash... */
+    //返回1，表示这次搬运了一个ht[0]里的hash项，后续还得继续搬
     return 1;
 }
 
@@ -301,7 +314,7 @@ dictEntry *dictAddRaw(dict *d, void *key, dictEntry **existing)
     long index;
     dictEntry *entry;
     dictht *ht;
-
+    //有没有在rehashing中
     if (dictIsRehashing(d)) _dictRehashStep(d);
 
     /* Get the index of the new element, or -1 if

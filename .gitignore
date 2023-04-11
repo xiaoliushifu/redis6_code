@@ -1,9 +1,11 @@
 .*.swp
+.DS_Store
 *.o
 *.xo
 *.so
 *.d
 *.log
+*.includecache
 dump.rdb
 redis-benchmark
 redis-check-aof
